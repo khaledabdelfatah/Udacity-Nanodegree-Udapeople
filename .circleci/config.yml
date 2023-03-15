@@ -52,13 +52,34 @@ jobs:
       - run:
           name: test frontend
           command: |
-            cd ./frontend
+            cd frontend
             npm i
             npm run test     
+  test-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          keys: [backend-build]
+      # Your job code here
+      - run:
+          name: test backend
+          command: |
+            # Your code here
+            cd backend
+            npm i
+            npm run test
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
     jobs:
       - build-frontend
       - build-backend
+      - test-frontend:
+          requires: [build-build-frontend]
+      - test-backend:
+          requires: [build-backend]
 
