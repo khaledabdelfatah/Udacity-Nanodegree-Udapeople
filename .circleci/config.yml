@@ -21,10 +21,13 @@ jobs:
           paths: [frontend/node_modules]
           key: frontend-build
       - slack/notify:
-          branch_pattern: .+
           event: fail
           channel: C04TCCU6M7Z
           template: basic_fail_1
+       - slack/notify:
+          event: fail
+          channel: general
+          template: basic_fail_1     
 
 #Job for building backend  
 
