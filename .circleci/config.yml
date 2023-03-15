@@ -92,7 +92,7 @@ jobs:
             # Your code here
             cd frontend
             npm i
-            npm audit fix --audit-level=critical 
+            npm audit --audit-level=critical
 
 # add anlyze phase : scan back-end 
   scan-backend:
@@ -112,7 +112,7 @@ jobs:
             # Your code here
             cd backend
             npm i
-            npm audit fix --audit-level=critical 
+            npm audit --audit-level=critical
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
