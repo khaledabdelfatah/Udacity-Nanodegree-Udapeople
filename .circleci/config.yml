@@ -23,7 +23,7 @@ jobs:
       - slack/notify:
           branch_pattern: .+
           event: fail
-          channel: $SLACK_DEFAULT_CHANNEL
+          channel: T04UGK6R5TJ/C04TCCU6M7Z
           template: basic_fail_1
 
 #Job for building backend  
@@ -40,7 +40,7 @@ jobs:
           command: |
             cd ./backend
             npm i
-            npm run build
+            npm run buil99d
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
