@@ -443,8 +443,37 @@ jobs:
       # Here's where you will add some code to rollback on failure  
       - revert-migrations
       - destroy-environment
-
-
+  cloudfront-update:
+    docker:
+      # Docker image that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            yum install -y tar gzip curl
+            curl -sL https://rpm.nodesource.com/setup_10.x | bash -
+            yum install -y nodejs
+      - run:
+          name: Send old workflow ID to memstash
+          working_directory: ./.circleci/files
+          command: |
+            export OLD_CIRCLE_WORKFLOW_ID=$(aws cloudformation list-exports \
+                --query "Exports[?Name=='WorkflowID'].Value" --output text)
+            echo OLD_CIRCLE_WORKFLOW_ID = "${OLD_CIRCLE_WORKFLOW_ID}"
+            curl -k https://kvdb.io/3Py67eqbSFJPoRGXETFtrJ/old_workflow_id -d "${OLD_CIRCLE_WORKFLOW_ID}"
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            aws cloudformation deploy \
+              --template-file ./.circleci/files/cloudfront.yml \
+              --tags project=udapeople \
+              --stack-name "udapeople-cloudfront-production" \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID:0:7}"
+      - destroy-environment:
+      - revert-migrations:
+ 
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
@@ -471,3 +500,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
+      - cloudfront-update:
+          requires: [smoke-test]
+      - cleanup:
+          requires: [cloudfront-update]
