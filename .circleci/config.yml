@@ -44,16 +44,15 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
-      # Checkout code from git
       - checkout
       # Restore from cache
       - restore_cache:
           key: frontend-build      
       # Your job code here
-       - run:
+      - run:
           name: test frontend
           command: |
-            cd frontend
+            cd ./frontend
             npm i
             npm run test     
 # Orchestrate our job run sequence
