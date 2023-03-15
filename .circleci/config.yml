@@ -16,18 +16,10 @@ jobs:
           command: |
             cd ./frontend
             npm i
-            npm run bu99ild
+            npm run build
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
-      - slack/notify:
-          event: fail
-          channel: C04TCCU6M7Z
-          template: basic_fail_1
-      - slack/notify:
-          event: fail
-          channel: general
-          template: basic_fail_1     
 
 #Job for building backend  
 
@@ -43,7 +35,7 @@ jobs:
           command: |
             cd ./backend
             npm i
-            npm run buil99d
+            npm run build
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
