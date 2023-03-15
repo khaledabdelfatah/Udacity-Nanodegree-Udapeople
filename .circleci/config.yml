@@ -1,5 +1,6 @@
 version: 2.1
-
+orbs:
+  slack: circleci/slack@4.12.1
 # Define the jobs we want to run for this project
 jobs:
 #Job for building frontend 
@@ -15,10 +16,15 @@ jobs:
           command: |
             cd ./frontend
             npm i
-            npm run build
+            npm run bu99ild
       - save_cache:
           paths: [frontend/node_modules]
           key: frontend-build
+      - slack/notify:
+          branch_pattern: .+
+          event: fail
+          channel: $SLACK_DEFAULT_CHANNEL
+          template: basic_fail_1
 
 #Job for building backend  
 
