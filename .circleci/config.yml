@@ -24,7 +24,7 @@ jobs:
           event: fail
           channel: C04TCCU6M7Z
           template: basic_fail_1
-       - slack/notify:
+      - slack/notify:
           event: fail
           channel: general
           template: basic_fail_1     
