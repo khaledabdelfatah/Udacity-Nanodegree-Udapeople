@@ -305,7 +305,7 @@ jobs:
       - revert-migrations
 
   deploy-frontend:
-  docker:
+    docker:
       - image: python:3.7-alpine3.16
     steps:
       - checkout
