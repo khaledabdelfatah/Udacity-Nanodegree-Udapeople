@@ -51,7 +51,7 @@ jobs:
           name: Build front-end
           command: |
             cd ./frontend
-            npm i
+            sudo npm i
             npm run build
       - save_cache:
           paths: [frontend/node_modules]
@@ -75,7 +75,19 @@ jobs:
       - save_cache:
           paths: [backend/node_modules]
           key: backend-build
-
+      - run:
+          name: Compiled code will be retrieved by deploy-backend.yml 
+          command: |
+            mkdir /tmp/workspace/
+            cp ./backend/package.json /tmp/workspace/
+            cd backend/dist
+            tar -zcvf /tmp/workspace/backend.tar.gz ./
+            tar -zcvf ./../../backend.tar.gz ./
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths:
+            - package.json
+            - backend.tar.gz
 #Job for testing frontend            
   test-frontend:
     docker:
