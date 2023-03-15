@@ -272,6 +272,8 @@ jobs:
           no_output_timeout: 20m
           working_directory: ./backend
           command: |
+            npm cache clean --force
+
             npm i 
             npm run migrations > migrations_dump.txt
 
