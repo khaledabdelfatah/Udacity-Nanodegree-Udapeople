@@ -72,6 +72,47 @@ jobs:
             cd backend
             npm i
             npm run test
+
+
+# add anlyze phase : scan front-end 
+
+  scan-frontend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          key: frontend-build
+      # Your job code here
+      - run:
+          name: scan frontend vulnerability
+          command: |
+            # Your code here
+            cd frontend
+            npm i
+            npm audit fix --audit-level=critical 
+
+# add anlyze phase : scan back-end 
+  scan-backend:
+    docker:
+      # Docker image here
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          key: backend-build
+      # Your job code here
+      - run:
+          name: scan backend vulnerability
+          command: |
+            # Your code here
+            cd backend
+            npm i
+            npm audit fix --audit-level=critical 
 # Orchestrate our job run sequence
 workflows:
   build_and_test:
@@ -82,4 +123,8 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
 
