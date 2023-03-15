@@ -23,7 +23,7 @@ jobs:
       - slack/notify:
           branch_pattern: .+
           event: fail
-          channel: T04UGK6R5TJ/C04TCCU6M7Z
+          channel: C04TCCU6M7Z
           template: basic_fail_1
 
 #Job for building backend  
